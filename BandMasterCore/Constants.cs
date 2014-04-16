@@ -14,7 +14,8 @@ namespace BandMasterCore
         public const int  ANT_SHORT_NAME_LEN = 5;
         public const int  ANT_LONG_NAME_LEN = 10;
         public const int  PROFILE_NAME_LEN = 6;
-        public const int  NO_ANTENNA = 99;
+        public const int  BAND_MAX = 9;
+        public const byte  NO_ANTENNA = 99;
 
         public const int ANT_CONFIG_BITS = 12;
         public const int BAND_CONFIG_BITS = 10;

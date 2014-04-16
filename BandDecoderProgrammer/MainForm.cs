@@ -154,15 +154,56 @@ namespace BandDecoderProgrammer
             //
             var cfg = new ProfileConfig
             {
+                Name = "Fake",
                 BandChangeDelay = 10,
                 BandOutDelay = 2,
                 SameBandPttLock = true,
                 AntShortNames = new List<string> { "GP160", "4SQ", "DIPOL", "YAGI", "WARC", "STACK", "STACK", "STACK" },
                 AntLongNames = new List<string> { "VERTICAL", "4 SQUARE", "DIPOL 40M", "YAGI 40M", "YAGI WARC", "STACK 20M", "STACK 15M", "STACK 10M" },
-                AntOutCfg = new List<ushort> { Convert.ToUInt16("000000001", 2), Convert.ToUInt16("011110000001", 2), Convert.ToUInt16("000010000", 2), Convert.ToUInt16("000001101", 2), Convert.ToUInt16("01111111", 2), Convert.ToUInt16("001000001", 2), Convert.ToUInt16("000001001", 2), Convert.ToUInt16("001000001", 2) }
+                AntOutCfg = new List<ushort> { Convert.ToUInt16("000000001", 2),
+                                               Convert.ToUInt16("011110000001", 2),
+                                               Convert.ToUInt16("000010000", 2),
+                                               Convert.ToUInt16("000001101", 2), 
+                                               Convert.ToUInt16("01111111", 2),
+                                               Convert.ToUInt16("001000001", 2),
+                                               Convert.ToUInt16("000001001", 2),
+                                               Convert.ToUInt16("001000001", 2) },
+                AntPerBand = new List<List<byte>> { new List<byte> { 0, 1, Constants.NO_ANTENNA }, 
+                                                    new List<byte> { 2, Constants.NO_ANTENNA, Constants.NO_ANTENNA }, 
+                                                    new List<byte> { 1, 2, 3 },
+                                                    new List<byte> { 2, Constants.NO_ANTENNA, Constants.NO_ANTENNA },
+                                                    new List<byte> { 0, 4, 8 },
+                                                    new List<byte> { Constants.NO_ANTENNA, Constants.NO_ANTENNA, Constants.NO_ANTENNA },
+                                                    new List<byte> { 0, 4, 8 },
+                                                    new List<byte> { 0, 5, 7 } },
+                BandOutCfg = new List<ushort> { Convert.ToUInt16("10101010", 2),
+                                               Convert.ToUInt16("10000001", 2),
+                                               Convert.ToUInt16("00010000", 2),
+                                               Convert.ToUInt16("00001101", 2), 
+                                               Convert.ToUInt16("01111111", 2),
+                                               Convert.ToUInt16("1100001101", 2), 
+                                               Convert.ToUInt16("01111111", 2),
+                                               Convert.ToUInt16("1101000001", 2),
+                                               Convert.ToUInt16("00001001", 2),
+                                               Convert.ToUInt16("01000001", 2) },
             };
 
             fillUIFromConfig(cfg);
+            var cfg2 = getconfigFromUI();
+
+            var cfgStr = cfg.toHexStr();
+
+            var cfg2Str = cfg2.toHexStr();
+
+            var cfg3 = new ProfileConfig();
+            cfg3.readFromHexStr(cfg2Str);
+            fillUIFromConfig(cfg3);
+            var cfg3Str = cfg3.toHexStr();
+            
+            if (cfg.toHexStr() != cfg3.toHexStr())
+            {
+               throw new Exception();
+            }
 
             toggleConfigControls(true);
 
@@ -306,7 +347,11 @@ namespace BandDecoderProgrammer
                 {
                     ctrl.Enabled = enable;
                 }
-            }     
+            }
+            profileNameBox.Enabled = enable;
+            bandOutDelayBox.Enabled = enable;
+            bandChangeDelayBox.Enabled = enable;
+            pttBandBlockBox.Enabled = enable;
         }
 
         private void enableAntPerBandControls()
@@ -337,6 +382,7 @@ namespace BandDecoderProgrammer
 
         private void fillUIFromConfig(ProfileConfig cfg)
         {
+            profileNameBox.Text = cfg.Name;
             bandChangeDelayBox.Value = cfg.BandChangeDelay;
             bandOutDelayBox.Value = cfg.BandOutDelay;
             pttBandBlockBox.Checked = cfg.SameBandPttLock;
@@ -368,24 +414,115 @@ namespace BandDecoderProgrammer
             }
 
             // Antennas per band
-            /*foreach (var comboList in antPerBandList)
+            var antPerBandUIRows = antPerBandList.Zip(cfg.AntPerBand, (cbl, bl) => new { BandComboBoxList = cbl, BandAntIdList = bl });
+            foreach (var uiRow in antPerBandUIRows)
             {
-                foreach (var antComboBox in comboList)
+                var antPerBandUI = uiRow.BandComboBoxList.Zip(uiRow.BandAntIdList, (cb, id) => new { ComboBox = cb, AntId = id });
+                foreach (var ui in antPerBandUI)
                 {
-                    var selectedIdx = antComboBox.SelectedIndex;
-                    var i = 1;
-                    antComboBox.Items.Clear();
-                    foreach (var longNameBox in antLongNamesList)
+                    if (ui.AntId != Constants.NO_ANTENNA)
                     {
-                        antComboBox.Items.Add(i + ". " + longNameBox.Text);
-                        i++;
+                        ui.ComboBox.SelectedIndex = ui.AntId;
                     }
-                    antComboBox.Items.Add("- No Antenna");
-                    antComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-                    // Select previous one
-                    antComboBox.SelectedIndex = selectedIdx;
+                    else
+                    {
+                        ui.ComboBox.SelectedIndex = ui.ComboBox.Items.Count - 1;
+                    }
                 }
-            }*/
+            }
+
+            // Band out bits
+            var bandOutBitsUI = bandBitCfgList.Zip(cfg.BandOutCfg, (cbl, b) => new { CheckBoxList = cbl, Bits = b });
+            foreach (var ui in bandOutBitsUI)
+            {
+                int idx = 0;
+                foreach (var cb in ui.CheckBoxList)
+                {
+                    cb.Checked = ((ui.Bits >> idx) & 0x01) == 0x01 ? true : false;
+                    idx++;
+                }
+            }
+        }
+
+        
+        private ProfileConfig getconfigFromUI()
+        {
+            var cfg = new ProfileConfig();
+            cfg.Name = profileNameBox.Text;
+            cfg.BandChangeDelay = Convert.ToByte(bandChangeDelayBox.Value);
+            cfg.BandOutDelay = Convert.ToByte(bandOutDelayBox.Value);
+            cfg.SameBandPttLock = pttBandBlockBox.Checked;
+
+            // short names
+            cfg.AntShortNames.Clear();
+            foreach (var shortNameTextBox in antShortNamesList)
+            {
+                cfg.AntShortNames.Add(shortNameTextBox.Text);
+            }
+
+            // long names
+            cfg.AntLongNames.Clear();
+            foreach (var longNameTextBox in antLongNamesList)
+            {
+                cfg.AntLongNames.Add(longNameTextBox.Text);
+            }
+
+            // Ant out bits
+            cfg.AntOutCfg.Clear();
+            foreach (var antBitRow in antBitCfgList)
+            {
+                ushort antBits = 0;
+                var idx = 0;
+                ushort one = 1;
+                foreach (var antCB in antBitRow)
+                {
+                    if (antCB.Checked)
+                    {
+                        antBits += (ushort)(one << idx);
+                    }
+                    idx++;
+                }
+                cfg.AntOutCfg.Add(antBits);
+            }
+
+            // Antennas per band
+            cfg.AntPerBand.Clear();
+            foreach(var perBandUIRow in antPerBandList)
+            {
+                var bandCfg = new List<byte>();
+                foreach(var selectBox in perBandUIRow)
+                {
+                    if (selectBox.SelectedIndex == selectBox.Items.Count - 1)
+                    {
+                        bandCfg.Add(Constants.NO_ANTENNA);
+                    }
+                    else
+                    {
+                        bandCfg.Add((byte)selectBox.SelectedIndex);
+                    }
+                }
+                cfg.AntPerBand.Add(bandCfg);
+            }
+
+            // Band out bits
+            cfg.BandOutCfg.Clear();
+            foreach (var bandBitRow in bandBitCfgList)
+            {
+                ushort bandBits = 0;
+                var idx = 0;
+                ushort one = 1;
+                foreach (var bandCB in bandBitRow)
+                {
+                    if (bandCB.Checked)
+                    {
+                        bandBits += (ushort)(one << idx);
+                    }
+                    idx++;
+                }
+                cfg.BandOutCfg.Add(bandBits);
+            }
+
+            return cfg;
         }
 
     }

@@ -302,7 +302,6 @@
             this.profileNameBox.Name = "profileNameBox";
             this.profileNameBox.Size = new System.Drawing.Size(100, 20);
             this.profileNameBox.TabIndex = 4;
-            this.profileNameBox.Text = "STN A";
             // 
             // label14
             // 
