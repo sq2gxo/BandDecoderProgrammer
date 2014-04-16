@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BandDecoderProgrammer", "BandDecoderProgrammer\BandDecoderProgrammer.csproj", "{A7B66922-C705-4D43-8A3F-F5BFB46A3988}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BandMasterCore", "BandMasterCore\BandMasterCore.csproj", "{59E4AEF4-980B-4C02-947B-E58D94B367C1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A7B66922-C705-4D43-8A3F-F5BFB46A3988}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7B66922-C705-4D43-8A3F-F5BFB46A3988}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7B66922-C705-4D43-8A3F-F5BFB46A3988}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7B66922-C705-4D43-8A3F-F5BFB46A3988}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59E4AEF4-980B-4C02-947B-E58D94B367C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59E4AEF4-980B-4C02-947B-E58D94B367C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59E4AEF4-980B-4C02-947B-E58D94B367C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59E4AEF4-980B-4C02-947B-E58D94B367C1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,10 @@
+D:\Documents\amateur_radio\BandDecoderProgrammer\BandMasterCore\bin\Debug\BandMasterCore.dll
+D:\Documents\amateur_radio\BandDecoderProgrammer\BandMasterCore\bin\Debug\BandMasterCore.pdb
+D:\Documents\amateur_radio\BandDecoderProgrammer\BandMasterCore\obj\Debug\BandMasterCore.csprojResolveAssemblyReference.cache
+D:\Documents\amateur_radio\BandDecoderProgrammer\BandMasterCore\obj\Debug\BandMasterCore.dll
+D:\Documents\amateur_radio\BandDecoderProgrammer\BandMasterCore\obj\Debug\BandMasterCore.pdb
+D:\Marek\DYSK\Documents\amateur_radio\BandDecoderProgrammer\BandMasterCore\bin\Debug\BandMasterCore.dll
+D:\Marek\DYSK\Documents\amateur_radio\BandDecoderProgrammer\BandMasterCore\bin\Debug\BandMasterCore.pdb
+D:\Marek\DYSK\Documents\amateur_radio\BandDecoderProgrammer\BandMasterCore\obj\Debug\BandMasterCore.csprojResolveAssemblyReference.cache
+D:\Marek\DYSK\Documents\amateur_radio\BandDecoderProgrammer\BandMasterCore\obj\Debug\BandMasterCore.dll
+D:\Marek\DYSK\Documents\amateur_radio\BandDecoderProgrammer\BandMasterCore\obj\Debug\BandMasterCore.pdb
