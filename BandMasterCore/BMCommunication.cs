@@ -18,7 +18,7 @@ namespace BandMasterCore
 
         private string ReadBuffer = "";
 
-        public void ParseReceivedData(string indata)
+        public ProfileConfig ParseReceivedData(string indata)
         {
             ReadBuffer += indata;
             var idx = ReadBuffer.IndexOf('\n');
@@ -26,12 +26,28 @@ namespace BandMasterCore
             {
                 var message = ReadBuffer.Substring(0, idx);
                 ReadBuffer = ReadBuffer.Remove(0, idx + 1);
-                // process message
-                BMConnected = true;
+                if (message.StartsWith("DS"))
+                {
+                    // ignore device status
+                    return null;
+                }
+ 
+                var deviceConfig = new ProfileConfig();
+                bool result = deviceConfig.readFromHexStr(message);
+
+                if (result)
+                {
+                    BMConnected = true;
+                    ConfigRead = true;
+
+                    return deviceConfig;
+                }
+                
             }
+            return null;
         }
 
-        public string PrepareRequest(RequestType type)
+        public string PrepareRequest(RequestType type, ProfileConfig cfg)
         {
             string request;
             switch (type)
@@ -41,17 +57,11 @@ namespace BandMasterCore
                     break;
                 case RequestType.WRITECFG:
                     request = "PW";
+                    request += cfg.toHexStr();
                     break;
                 default:
                     return "";
             }
-            request += "\n";
-            return request;
-        }
-
-        public string PrepareConfigWriteRequest()
-        {
-            string request = "";
             request += "\n";
             return request;
         }

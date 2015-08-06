@@ -152,6 +152,7 @@ namespace BandDecoderProgrammer
             //
             //DEBUG code - create fake Profileconfig and fill GUI with values
             //
+            /*
             var cfg = new ProfileConfig
             {
                 Name = "Fake",
@@ -192,6 +193,7 @@ namespace BandDecoderProgrammer
             var cfg2 = getconfigFromUI();
 
             var cfgStr = cfg.toHexStr();
+            MessageBox.Show("Encoded config len: " + cfgStr.Length + " = " + cfgStr);
 
             var cfg2Str = cfg2.toHexStr();
 
@@ -206,7 +208,7 @@ namespace BandDecoderProgrammer
             }
 
             toggleConfigControls(true);
-
+            */
             //
             // DEBUG END
             //
@@ -255,11 +257,16 @@ namespace BandDecoderProgrammer
             try
             {
                 BMComm = new BMCommunication();
+                serialPort.ReceivedBytesThreshold = 1;
                 serialPort.Open();
                 serialPort.NewLine = "\n";
                 selectComPortBox.Enabled = false;
                 connectButton.Enabled = false;
                 closeButton.Enabled = true;
+                programButton.Enabled = true;
+
+                // Ask for BM configuration
+                serialPort.Write(BMComm.PrepareRequest(RequestType.GETCFG, null));       
             }
             catch
             {
@@ -278,6 +285,7 @@ namespace BandDecoderProgrammer
                 selectComPortBox.Enabled = true;
                 connectButton.Enabled = true;
                 closeButton.Enabled = false;
+                programButton.Enabled = false;
                 statusLabel.Text = "offline";
                 statusLabel.ForeColor = Color.DarkRed;
                 toggleConfigControls(false);
@@ -293,15 +301,22 @@ namespace BandDecoderProgrammer
         {
             SerialPort sp = (SerialPort)sender;
             string indata = sp.ReadExisting();
-            BMComm.ParseReceivedData(indata);
+            var cfg = BMComm.ParseReceivedData(indata);
+            if (cfg != null)
+            {
+                this.Invoke((MethodInvoker)(() =>
+                        {
+                            fillUIFromConfig(cfg);
+                        }
+                    )
+                );
+            }
             if (BMComm.BMConnected)
             {
                 statusLabel.Invoke((MethodInvoker)(() =>
                         {
                             statusLabel.Text = "online";
-                            statusLabel.ForeColor = Color.Green;
-                            // Ask for BM configuration
-                            serialPort.Write(BMComm.PrepareRequest(RequestType.GETCFG));                            
+                            statusLabel.ForeColor = Color.Green;                     
                         }
                     )
                 );
@@ -309,7 +324,13 @@ namespace BandDecoderProgrammer
             if (BMComm.ConfigRead)
             {
                 // Enable all controls
-                toggleConfigControls(true);
+                this.Invoke((MethodInvoker)(() =>
+                        {
+                            toggleConfigControls(true);
+                        }
+                     )
+                );
+
             }
         }
 
@@ -523,6 +544,19 @@ namespace BandDecoderProgrammer
             }
 
             return cfg;
+        }
+
+        private void programButton_Click(object sender, EventArgs e)
+        {
+            // serialize config and send via serial connection
+            var currentCfg = getconfigFromUI();
+            var serializedRequest = BMComm.PrepareRequest(RequestType.WRITECFG, currentCfg);
+            serialPort.Write(serializedRequest);
+        }
+
+        private void serialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
+        {
+            MessageBox.Show("serialPort_ErrorReceived");
         }
 
     }

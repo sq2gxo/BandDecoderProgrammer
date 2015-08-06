@@ -57,6 +57,7 @@
             this.pttBandBlockBox = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
             this.closeButton = new System.Windows.Forms.Button();
+            this.programButton = new System.Windows.Forms.Button();
             this.cfgTabControl.SuspendLayout();
             this.antTabPage.SuspendLayout();
             this.antBandTabPage.SuspendLayout();
@@ -69,6 +70,7 @@
             // serialPort
             // 
             this.serialPort.StopBits = System.IO.Ports.StopBits.Two;
+            this.serialPort.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(this.serialPort_ErrorReceived);
             this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
             // 
             // selectComPortBox
@@ -352,11 +354,23 @@
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
             // 
+            // programButton
+            // 
+            this.programButton.Enabled = false;
+            this.programButton.Location = new System.Drawing.Point(436, 7);
+            this.programButton.Name = "programButton";
+            this.programButton.Size = new System.Drawing.Size(75, 23);
+            this.programButton.TabIndex = 7;
+            this.programButton.Text = "Program";
+            this.programButton.UseVisualStyleBackColor = true;
+            this.programButton.Click += new System.EventHandler(this.programButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(555, 498);
+            this.Controls.Add(this.programButton);
             this.Controls.Add(this.closeButton);
             this.Controls.Add(this.cfgTabControl);
             this.Controls.Add(this.statusLabel);
@@ -413,6 +427,7 @@
         private System.Windows.Forms.NumericUpDown bandOutDelayBox;
         private System.Windows.Forms.TextBox profileNameBox;
         private System.Windows.Forms.Button closeButton;
+        private System.Windows.Forms.Button programButton;
     }
 }
 

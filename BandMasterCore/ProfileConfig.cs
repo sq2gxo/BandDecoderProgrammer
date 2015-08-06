@@ -64,7 +64,10 @@ namespace BandMasterCore
             {
                 if (i < AntOutCfg.Count)
                 {
-                    retVal.Append(AntOutCfg[i].ToString("X4"));
+                    byte lower = (byte)(AntOutCfg[i] & 0xff);
+                    retVal.Append(lower.ToString("X2"));
+                    byte upper = (byte)(AntOutCfg[i] >> 8);
+                    retVal.Append(upper.ToString("X2"));
                 }
                 else
                 {
@@ -77,7 +80,10 @@ namespace BandMasterCore
             {
                 if (i < BandOutCfg.Count)
                 {
-                    retVal.Append(BandOutCfg[i].ToString("X4"));
+                    byte lower = (byte)(BandOutCfg[i] & 0xff);
+                    retVal.Append(lower.ToString("X2"));
+                    byte upper = (byte)(BandOutCfg[i] >> 8);
+                    retVal.Append(upper.ToString("X2"));
                 }
                 else
                 {
@@ -137,11 +143,11 @@ namespace BandMasterCore
 
 
 
-        public void readFromHexStr(string configHex)
+        public bool readFromHexStr(string configHex)
         {
             if (configHex.Length != HEX_CONF_LEN)
             {
-                return;
+                return false;
             }
 
             byte[] bytes = new byte[HEX_CONF_LEN / 2];
@@ -179,12 +185,12 @@ namespace BandMasterCore
                 skipIdx += takeSize;
             }
 
-            //AntOutCfg
+            //AntOutCfg - little endian
             AntOutCfg.Clear();
             for (int i = 0; i < Constants.MAX_ANT_TOTAL; i++)
             {
                 takeSize = 2;
-                ushort val = (ushort) ((ushort)bytes[skipIdx] * 256 + (ushort)bytes[skipIdx + 1]);
+                ushort val = (ushort) ((ushort)bytes[skipIdx + 1] * 256 + (ushort)bytes[skipIdx]);
                 AntOutCfg.Add(val);
                 skipIdx += takeSize;
             }
@@ -194,7 +200,7 @@ namespace BandMasterCore
             for (int i = 0; i <= Constants.BAND_MAX; i++)
             {
                 takeSize = 2;
-                ushort val = (ushort)((ushort)bytes[skipIdx] * 256 + (ushort)bytes[skipIdx + 1]);
+                ushort val = (ushort)((ushort)bytes[skipIdx + 1] * 256 + (ushort)bytes[skipIdx]);
                 BandOutCfg.Add(val);
                 skipIdx += takeSize;
             }
@@ -236,6 +242,8 @@ namespace BandMasterCore
                 AntSelBand.Add(val);
                 skipIdx += takeSize;
             }
+
+            return true;
         }
     }
 }

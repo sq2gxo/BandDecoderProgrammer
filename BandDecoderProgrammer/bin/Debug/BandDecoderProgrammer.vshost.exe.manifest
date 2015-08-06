@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="BandDecoderProgrammer.exe" size="30720">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="BandDecoderProgrammer.exe" size="29696">
       <assemblyIdentity name="BandDecoderProgrammer" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>CxpWehLPlizES4TJV/F5GRLhPq+xWLQy7JKZpTsHD0Y=</dsig:DigestValue>
+        <dsig:DigestValue>NrV/VgUaGMMtq9DPFA+/5Q6eqs7dNObTnMDlRQyK/hA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -61,7 +61,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>iOBXNmrkSGIbSrz5pASYdo7kRNYorflHWWmSSohzkco=</dsig:DigestValue>
+        <dsig:DigestValue>4kKePp0PhbZD+eXbLCRaTKTaZkC4m6PJVOoCZ0Rb1Lg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
